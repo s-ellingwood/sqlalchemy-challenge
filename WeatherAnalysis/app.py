@@ -59,7 +59,7 @@ def precipitation():
         filter(Measurement.date >= "2016-08-23").order_by(Measurement.date).all()
     
     results = []
-    for date, prcp in query1:
+    for date, prcp in precipquery:
         precip = {date : prcp}
         results.append(precip)
 
@@ -104,15 +104,15 @@ def temp_start(start_date):
         filter(Measurement.date >= "start_date").all()
     
     start_list = []
-    for minimum, maximum, average in start_end_temps:
+    for minimum, maximum, average in start_temps:
         temp_dict = {}
         temp_dict["Minimum"] = minimum
         temp_dict["Maximum"] = maximum
         temp_dict["Average"] = average
-        start_end_list.append(temp_dict)
+        start_list.append(temp_dict)
     return jsonify(start_list)
 
-@app.route("api/v1.0/<start>/<end>")
+@app.route("/api/v1.0/<start>/<end>")
 def temp_start_end(start_date, end_date):
     # For a specified start and end date, calculate "TMIN", "TAVG", and "TMAX" for dates from start date to end date, inclusive.
     start_end_temps = session.query(func.min(Measurement.tobs), func.max(Measurement.tobs), func.avg(Measurement.tobs)).\
